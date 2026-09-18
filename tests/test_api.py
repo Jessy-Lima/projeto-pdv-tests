@@ -21,3 +21,19 @@ def test_listagem_produtos_sem_login():
 
     assert resposta.status_code == 401
 
+# Teste página de lista de produtos criada com sucesso
+def test_verificar_produto_criando_com_sucesso(cliente, db_session_test):
+
+    categoria = Categoria(nome="Bonés")
+    db_session_test.add(categoria)
+    db_session_test.commit()
+
+    #Criando um produto para teste
+    produto = Produto(nome="Boné Aba Reta", preco=129.90, estoque_atual=50, categoria_id=categoria.id)
+    db_session_test.add(produto)
+    db_session_test.commit()
+
+    resposta = cliente.get("/produtos/")
+
+    #Teste se existe o Boné  na listagem de produtos
+    assert "Boné Aba Reta" in resposta.text
