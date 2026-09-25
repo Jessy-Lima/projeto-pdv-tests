@@ -92,7 +92,7 @@ def test_verificar_busca_rota_cliente_funciona(cliente, db_session_test):
     assert "Jose" in resposta.text
     assert "Helen" not in resposta.text
 
-#Teste criar produto com sucesso na rota de produtos/novo
+#Teste criar produto com sucesso na rota de produtos/novo /
 def test_criar_produto_com_sucesso_na_rota_novo(cliente):
     resposta = cliente.post(
         "/produtos/novo",
@@ -109,7 +109,7 @@ def test_criar_produto_com_sucesso_na_rota_novo(cliente):
     assert "Celular 14X" in resposta_lista.text
 
 
-#Teste editar um produto novo
+#Teste editar um produto novo /
 def test_editar_produto_atualiza_campos(cliente, db_session_test):
     #Criar um produto novo no banco
     produto= Produto(nome="Nome antigo", preco=20.0, estoque_atual=32)
