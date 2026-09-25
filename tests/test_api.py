@@ -125,4 +125,4 @@ def test_editar_produto_atualiza_campos(cliente, db_session_test):
     assert resposta.status_code == 302
 
     buscar_produto = db_session_test.query(Produto).filter(Produto.id == produto.id).first()
-    assert buscar_produto.nome == "Novo nome"
+    assert buscar_produto.nome == "Nome novo"
