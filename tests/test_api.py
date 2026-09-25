@@ -67,3 +67,27 @@ def test_listar_produtos_filtrado_por_busca(cliente, db_session_test):
 
     assert "Caneca Harry Potter" in resposta.text
     assert "Camisa Nike" not in resposta.text
+
+# Exercício = verificar se a busca da rota cliente funciona
+def test_verificar_busca_rota_cliente_funciona(cliente, db_session_test):
+
+    cliente1 = Cliente(
+        nome="Helen",
+        matricula=325,
+        telefone=11934565364
+    )
+
+    cliente2 = Cliente(
+        nome="Jose",
+        matricula=765,
+        telefone=11963452364
+    )
+
+    db_session_test.add(cliente1)
+    db_session_test.add(cliente2)
+    db_session_test.commit()
+
+    resposta = cliente.get("/clientes", params={"busca": "Jose"})
+
+    assert "Jose" in resposta.text
+    assert "Helen" not in resposta.text
