@@ -91,3 +91,38 @@ def test_verificar_busca_rota_cliente_funciona(cliente, db_session_test):
 
     assert "Jose" in resposta.text
     assert "Helen" not in resposta.text
+
+#Teste criar produto com sucesso na rota de produtos/novo
+def test_criar_produto_com_sucesso_na_rota_novo(cliente):
+    resposta = cliente.post(
+        "/produtos/novo",
+        data={"nome": "Celular 14X", "preco": "2000.00", "estoque_atual": "20"},
+        follow_redirects=False
+    )
+
+    #Testar
+    assert resposta.status_code == 302
+    assert resposta.headers["location"] == "/produtos?criado=ok"
+
+    #Buscar as indormações do HTML
+    resposta_lista = cliente.get("/produtos")
+    assert "Celular 14X" in resposta_lista.text
+
+
+#Teste editar um produto novo
+def test_editar_produto_atualiza_campos(cliente, db_session_test):
+    #Criar um produto novo no banco
+    produto= Produto(nome="Nome antigo", preco=20.0, estoque_atual=32)
+    db_session_test.add(produto)
+    db_session_test.commit()
+
+    resposta = cliente.post(
+        f"/produtos/{produto.id}/editar",
+        data={"nome": "Nome novo", "preco": "30.0", "estoque_atual": "6"},
+        follow_redirects=False
+    )
+
+    assert resposta.status_code == 302
+
+    buscar_produto = db_session_test.query(Produto).filter(Produto.id == produto.id).first()
+    assert buscar_produto.nome == "Novo nome"
